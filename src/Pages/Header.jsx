@@ -7,14 +7,16 @@ import { account } from "../AppWriteConfig";
 const Header = () => {
   const navigate = useNavigate();
   const { user, logoutUser } = useAuth();
-
+  {
+    /*
   useEffect(() => {
     if (!user) {
       // Redirect to login if user is not authenticated
       navigate("/login");
     }
   }, [user, navigate]);
-
+*/
+  }
   return (
     <AppBar position="fixed">
       <Toolbar>
@@ -23,10 +25,15 @@ const Header = () => {
           component="div"
           sx={{ flexGrow: 1, alignContent: "left" }}
         >
-          <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
-            Welcome
-          </Link>
+          {user ? (
+            <>Welcome, {user.name}</>
+          ) : (
+            <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
+              Welcome
+            </Link>
+          )}
         </Typography>
+
         <div>
           {user ? (
             <>
@@ -53,16 +60,25 @@ const Header = () => {
                   Candidates
                 </Button>
               )}
-
-              {(user.name === "Tushar Ahuja" || user.labels[0] === "admin") && (
+              {(user.labels[0] === "compliance" ||
+                user.labels[0] === "admin") && (<>
                 <Button
                   component={Link}
-                  to="/SignUp"
+                  to="/Email"
                   color="inherit"
                   variant="text"
                 >
-                  Create User
+                  Email
                 </Button>
+                <Button
+                  component={Link}
+                  to="/Templates"
+                  color="inherit"
+                  variant="text"
+                >
+                  Payment Table
+                </Button>
+                </>
               )}
               <Button
                 component={Link}
@@ -85,14 +101,25 @@ const Header = () => {
               </Button>
             </>
           ) : (
-            <Button
-              component={Link}
-              to="/login"
-              color="inherit"
-              variant="outlined"
-            >
-              Login
-            </Button>
+            <>
+              <Button
+                component={Link}
+                to="/login"
+                color="inherit"
+                variant="outlined"
+              >
+                Login
+              </Button>
+
+              <Button
+                component={Link}
+                to="/SignUp"
+                color="inherit"
+                variant="text"
+              >
+                Create User
+              </Button>
+            </>
           )}
         </div>
       </Toolbar>

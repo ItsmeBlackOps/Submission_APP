@@ -27,6 +27,7 @@ const InterviewForm = () => {
     comments: "",
     company: "",
     date: new Date().toISOString().substr(0, 10),
+    vendorEmail: "",
     employmentType: "",
     followUp2: "",
     followUp3: "",
@@ -95,8 +96,10 @@ const InterviewForm = () => {
       !formData.position ||
       !formData.rate ||
       !formData.sourceOfSubmission ||
+      !formData.InterviewOrSubmission ||
       !formData.vendorContact ||
       !formData.vendorName ||
+      !formData.vendorEmail ||
       (InterviewOrSubmission === "Interview" && !formData.InterviewSchedule)
     ) {
       handleOpenSnackbar("All fields are required.");
@@ -119,6 +122,7 @@ const InterviewForm = () => {
         item.candidateName === formData.candidateName &&
         item.comments === formData.comments &&
         item.employmentType === formData.employmentType &&
+        item.vendorEmail === formData.vendorEmail &&
         item.followUp2 === formData.followUp2 &&
         item.followUp3 === formData.followUp3 &&
         item.followUp4 === formData.followUp4 &&
@@ -333,6 +337,15 @@ const InterviewForm = () => {
           value={formData["vendorContact"]}
           onChange={handleInputChange}
           variant="standard"
+          required
+        />
+        <TextField
+          label="Vendor Email"
+          name="vendorEmail"
+          value={formData["vendorEmail"]}
+          onChange={handleInputChange}
+          variant="standard"
+          type='email'
           required
         />
         <TextField

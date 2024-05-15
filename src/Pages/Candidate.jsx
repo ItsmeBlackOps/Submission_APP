@@ -220,6 +220,14 @@ export default function Candidate_List() {
     },
   ];
 
+  columns = columns.map((column) => {
+    if (
+      (user.labels[0] === "admin" || user.labels[0] === "Manager")
+    ) {
+      return { ...column, editable: true };
+    }
+    return column;
+  });
   return (
     <Box sx={{ height: "90vh", width: 1, marginTop: 7 }}>
 

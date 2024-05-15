@@ -14,6 +14,9 @@ import { StyledEngineProvider } from '@mui/material/styles';
 import Candidate_List from './Pages/Candidate'
 import ManagerRoutes from './utils/ManagerRoutes'
 import SignUp from './Pages/SignUp'
+import ReferenceFormat from './Pages/Compliance/referece'
+import ComplianceRoutes from './utils/ComplianceRoutes'
+import EmailTemplates from './Pages/Compliance/emailTemplates'
 function App() {
 
   return (
@@ -26,16 +29,18 @@ function App() {
             <Route path="/login" element={<Login/>}/>
             {/* <Route path="/register" element={<Register/>}/> */}
               <Route path="/" element={<Home/>}/>
-              
+              <Route path="/SignUp" element={<SignUp/>}></Route>
+            <Route element={<ComplianceRoutes/>}>  
+            <Route path='/Email' element= {<ReferenceFormat/>}/>
+            <Route path='/Templates' element= {<EmailTemplates/>}/>
+            </Route>
             <Route element={<PrivateRoutes />}>
 
               <Route path="/profile" element={<Profile/>}/>
               <Route path="/form" element={<InterviewForm/>}/>
               <Route path="/tasks" element={<QuickFilterOutsideOfGrid/>}/>
               <Route path="/candidate" element={<Candidate_List/>}/>
-              {/* <Route path="/demo" element={<StyledQuickFilterInsideOfGrid />} /> */}
-              <Route element={<ManagerRoutes />}> {/* Use AdminRoutes */}
-              <Route path="/SignUp" element={<SignUp/>}></Route>
+              <Route element={<ManagerRoutes />}> 
 
 
               

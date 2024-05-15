@@ -36,6 +36,7 @@ export const AuthProvider = ({children}) => {
 
          const logoutUser = async () => {
             await account.deleteSession('current');
+            navigate("/login");
             setUser(null)
          }
 
@@ -43,8 +44,9 @@ export const AuthProvider = ({children}) => {
             setLoading(true);
 
             try {
-                let response = await account.create(userInfo.email, userInfo.password, userInfo.name);
-                
+                let response = await account.create(ID.unique(), userInfo.email, userInfo.password, userInfo.name);
+                console.log("User created successfully:", response);
+
                 let accountDetails = await account.get();
                 setUser(accountDetails);
             } catch(error) {

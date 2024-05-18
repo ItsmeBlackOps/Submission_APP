@@ -129,7 +129,7 @@ export default function Candidate_List() {
       field: "Branch",
       headerName: "Branch",
       width: 150,
-      editable: true,
+      editable: false,
 
     },
     {
@@ -142,25 +142,26 @@ export default function Candidate_List() {
       field: "Recruiter",
       headerName: "Recruiter",
       display: 'flex',
+      width: '200',
       editable: false,
     },
     {
       field: "Team Lead",
       headerName: "Team Lead",
       width: 200,
-      editable: true,
+      editable: false,
     },
     {
       field: "Manager",
       headerName: "Manager",
       width: 200,
-      editable: true,
+      editable: false,
     },
     {
       field: "Status",
       headerName: "Status",
       width: 150,
-      editable: true,
+      editable: false,
     },
     {
       field: "Visa",
@@ -178,7 +179,7 @@ export default function Candidate_List() {
       field: "Location",
       headerName: "Location",
       width: 150,
-      editable: true,
+      editable: false,
     },
     {
       field: "Marketing start date",
@@ -203,13 +204,13 @@ export default function Candidate_List() {
       field: "Technology",
       headerName: "Technology",
       width: 200,
-      editable: true,
+      editable: false,
     },
     {
       field: "Upfront",
       headerName: "Upfront",
       width: 150,
-      editable: true,
+      editable: false,
     },
 
     {
@@ -229,7 +230,7 @@ export default function Candidate_List() {
     return column;
   });
   return (
-    <Box sx={{ height: "90vh", width: 1, marginTop: 7 }}>
+    <Box sx={{ height: 'calc(100vh - 64px)', width: '100%', mt: '64px', boxSizing: 'border-box', padding: 2 }}>
 
         <DataGrid
           pageSizeOptions={[5, 25, 100]}

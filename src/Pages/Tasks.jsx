@@ -218,11 +218,12 @@ export default function QuickFilterOutsideOfGrid() {
   });
 
   return (
-    <Box sx={{ height: "90vh", width: 1, marginTop: 7 }}>
+    <Box sx={{ height: 'calc(100vh - 64px)', width: '100%', mt: '64px', boxSizing: 'border-box', padding: 2 }}>
       <DataGrid
         pageSizeOptions={[5, 25, 100]}
         checkboxSelection
         cellSelection
+        autoHeight
         disableRowSelectionOnClick
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={handleProcessRowUpdateError}

@@ -35,7 +35,6 @@ function CandidateData ({ onDataReceived }) { // Accept a prop onDataReceived
         }
     };
     
-
     return null;
 }
 

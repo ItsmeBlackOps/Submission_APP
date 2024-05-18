@@ -17,46 +17,33 @@ import SignUp from './Pages/SignUp'
 import ReferenceFormat from './Pages/Compliance/referece'
 import ComplianceRoutes from './utils/ComplianceRoutes'
 import EmailTemplates from './Pages/Compliance/emailTemplates'
-function App() {
+import Box from '@mui/joy/Box';
 
+function App() {
   return (
     <Router>
-      
-        <AuthProvider>
-          <Header/>
-          
+      <AuthProvider>
+        <Header />
           <Routes>
-            <Route path="/login" element={<Login/>}/>
-            {/* <Route path="/register" element={<Register/>}/> */}
-              <Route path="/" element={<Home/>}/>
-              <Route path="/SignUp" element={<SignUp/>}></Route>
-            <Route element={<ComplianceRoutes/>}>  
-            <Route path='/Email' element= {<ReferenceFormat/>}/>
-            <Route path='/Templates' element= {<EmailTemplates/>}/>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/SignUp" element={<SignUp />} />
+            <Route element={<ComplianceRoutes />}>
+              <Route path="/Email" element={<ReferenceFormat />} />
+              <Route path="/Templates" element={<EmailTemplates />} />
             </Route>
             <Route element={<PrivateRoutes />}>
-
-              <Route path="/profile" element={<Profile/>}/>
-              <Route path="/form" element={<InterviewForm/>}/>
-              <Route path="/tasks" element={<QuickFilterOutsideOfGrid/>}/>
-              <Route path="/candidate" element={<Candidate_List/>}/>
-              <Route element={<ManagerRoutes />}> 
-
-
-              
-            </Route>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/form" element={<InterviewForm />} />
+              <Route path="/tasks" element={<QuickFilterOutsideOfGrid />} />
+              <Route path="/candidate" element={<Candidate_List />} />
+              <Route element={<ManagerRoutes />}>
+              </Route>
             </Route>
           </Routes>
-        </AuthProvider>
+      </AuthProvider>
     </Router>
-  )
+  );
 }
 
-
-const StyledQuickFilterInsideOfGrid = () => (
-  <StyledEngineProvider injectFirst>
-    <QuickFilterInsideOfGrid />
-  </StyledEngineProvider>
-);
-
-export default App
+export default App;

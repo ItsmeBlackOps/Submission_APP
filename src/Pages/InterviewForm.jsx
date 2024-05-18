@@ -21,6 +21,7 @@ const InterviewForm = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [taskdata, setTask] = useState([]);
+  
   const [formData, setFormData] = useState({
     InterviewSchedule: "",
     candidateName: "",
@@ -46,12 +47,24 @@ const InterviewForm = () => {
   const inputRef = React.useRef(null);
   const [InterviewOrSubmission, setInterviewOrSubmission] = useState("");
   const [loading, setLoading] = useState(true);
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    if (success) {
+      handleOpenSnackbar("Form submitted successfully.");
+      setSuccess(false); // Reset success status
+    }
+  }, [success]);
+
 
   const handleDataReceived = (jsonData) => {
-    setData(jsonData);
+    console.log(jsonData);
+    const filteredData = jsonData.filter((item) => item.Recruiter === user.name);
+    setData(filteredData);
     setLoading(false);
   };
-
+  
+  
     const handleTaskReceived = (tData) => {
     setTask(tData); // Fixed typo here
     setLoading(false);
@@ -105,34 +118,29 @@ const InterviewForm = () => {
       handleOpenSnackbar("All fields are required.");
       return;
     }
-    console.log("Existing data:", data);
-    console.log('taskdata', taskdata)
     const existingEntry = taskdata.find((item) => {
-      console.log("Comparing item:", item);
-      console.log("With formData:", formData);
-  
-      return (
-        item.company === formData.company &&
-        item.location === formData.location &&
-        item.position === formData.position &&
-        item.rate === formData.rate &&
-        item.sourceOfSubmission === formData.sourceOfSubmission &&
-        item.vendorContact === formData.vendorContact &&
-        item.vendorName === formData.vendorName &&
-        item.candidateName === formData.candidateName &&
-        item.comments === formData.comments &&
-        item.employmentType === formData.employmentType &&
-        item.vendorEmail === formData.vendorEmail &&
-        item.followUp2 === formData.followUp2 &&
-        item.followUp3 === formData.followUp3 &&
-        item.followUp4 === formData.followUp4 &&
-        item.interview === formData.interview &&
-        item.qcStatus === formData.qcStatus &&
-        item.recruiterName === formData.recruiterName &&
-        item.submission === formData.submission &&
-        item.InterviewOrSubmission === formData.InterviewOrSubmission
-        );
-    });
+      delete item['id'];
+      const keys1 = Object.keys(item);
+      const keys2 = Object.keys(formData);
+
+      if (keys1.length != keys2.length) {
+        return false;
+      }
+
+      for (let key of keys1) {
+        if (typeof item[key] === 'object' && typeof formData[key] === 'object') {
+          if (!areObjectsEqual(item[key], formData[key])) {
+            return false;
+          }
+        } else if (item[key] !== formData[key]) {
+          return false;
+        }
+      }
+    
+      return true;
+    }
+      
+    );
     if (existingEntry) {
       handleOpenSnackbar("Duplicate entry detected.");
       return;
@@ -152,29 +160,29 @@ const InterviewForm = () => {
         console.log(data);
         // Re-enable the submit button
         setIsSubmitting(false);
-        // Reset all fields
-        // setFormData({
-        //   InterviewSchedule: "",
-        //   candidateName: "",
-        //   comments: "",
-        //   company: "",
-        //   date: new Date().toISOString().substr(0, 10),
-        //   employmentType: "",
-        //   followUp2: "",
-        //   followUp3: "",
-        //   followUp4: "",
-        //   interview: "",
-        //   location: "",
-        //   position: "",
-        //   qcStatus: false,
-        //   rate: "",
-        //   recruiterName: user.name,
-        //   sourceOfSubmission: "",
-        //   status: "",
-        //   submission: "",
-        //   vendorContact: "",
-        //   vendorName: "",
-        // });
+        setSuccess(true); // Set success status
+        setFormData({
+          InterviewSchedule: "",
+          candidateName: "",
+          comments: "",
+          company: "",
+          date: new Date().toISOString().substr(0, 10),
+          employmentType: "",
+          followUp2: "",
+          followUp3: "",
+          followUp4: "",
+          interview: "",
+          location: "",
+          position: "",
+          qcStatus: false,
+          rate: "",
+          recruiterName: user.name,
+          sourceOfSubmission: "",
+          status: "",
+          submission: "",
+          vendorContact: "",
+          vendorName: "",
+        });
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -397,7 +405,7 @@ const InterviewForm = () => {
           elevation={6}
           variant="filled"
           onClose={handleCloseSnackbar}
-          severity="error"
+          severity={success ? "success" : "error"}
         >
           {snackbarMessage}
         </MuiAlert>

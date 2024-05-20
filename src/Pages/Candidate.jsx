@@ -71,11 +71,11 @@ export default function Candidate_List() {
     console.log(updatedRows);
 
     // Check if the current user is allowed to edit this row
-    if (user.labels[0] === "admin" || newRow.recruiterName === user.name) {
+    if (user.labels[0] === "admin" || newRow.Manager === user.labels[0]) {
       // Send updated row data to backend
       axios
         .post(
-          `https://reportcraft-backend.onrender.com/updateRow/${newRow.id}`,
+          `https://reportcraft-backend.onrender.com/updateCandidateRow/${newRow.id}`,
           newRow
         )
         .then(() => {

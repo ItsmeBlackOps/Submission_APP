@@ -71,7 +71,7 @@ export default function Candidate_List() {
     console.log(updatedRows);
 
     // Check if the current user is allowed to edit this row
-    if (user.labels[0] === "admin" || newRow.Manager === user.labels[0]) {
+    if (user.labels[0] === "admin" || newRow.Manager === user.name) {
       // Send updated row data to backend
       axios
         .post(

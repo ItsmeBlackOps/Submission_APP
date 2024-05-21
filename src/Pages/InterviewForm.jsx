@@ -153,7 +153,7 @@ const InterviewForm = () => {
 
     // Disable the submit button
     setIsSubmitting(true);
-    fetch("http://localhost:3000/addData", {
+    fetch("https://reportcraft-backend.onrender.com/api/addData", {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {
@@ -260,7 +260,7 @@ const InterviewForm = () => {
         >
           <MenuItem value="Submission">Submission</MenuItem>
           <MenuItem value="Interview">Interview</MenuItem>
-          <MenuItem value="">Select</MenuItem>
+          {/* <MenuItem value="">Select</MenuItem> */}
           
         </TextField>
 

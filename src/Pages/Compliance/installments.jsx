@@ -14,7 +14,7 @@ const InstallmentTable = ({ formData }) => {
 
   useEffect(() => {
     if (!formData) return;
-
+    console.log(formData);
     const total = (formData.annualPackage * formData.agreementPercentage) / 100;
     const outstanding = total - formData.upfront;
     let remainingBalance = outstanding;
@@ -79,50 +79,96 @@ const InstallmentTable = ({ formData }) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+      <Table sx={{ minWidth: 650, border: 1 }} size="small" aria-label="a dense table">
         <TableHead></TableHead>
         <TableBody>
           <TableRow>
             <TableCell
               sx={{
-                backgroundColor: 'black',
-                color: 'white',
-                borderBottom: 0,
-                borderTop: 1,
+                border: 1,
+                borderRight: '1px solid black',
               }}
             >
               Candidate Name:
             </TableCell>
             <TableCell
               sx={{
-                backgroundColor: 'black',
-                color: 'white',
-                borderBottom: 0,
-                borderTop: 1,
+                border: 1,
+                borderLeft: '1px solid black',
               }}
             >
               {formData.name}
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell sx={{ backgroundColor: 'black', color: 'white' }}>
+            <TableCell
+              sx={{
+                border: 1,
+                borderRight: '1px solid black',
+              }}
+            >
               Client Name:
             </TableCell>
-            <TableCell sx={{ backgroundColor: 'black', color: 'white' }}>
+            <TableCell
+              sx={{
+                border: 1,
+                borderLeft: '1px solid black',
+              }}
+            >
               {formData.company}
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>Annual Package:</TableCell>
-            <TableCell>${formData.annualPackage.toFixed(2)}</TableCell>
+            <TableCell
+              sx={{
+                border: 1,
+                borderRight: '1px solid black',
+              }}
+            >
+              Annual Package:
+            </TableCell>
+            <TableCell
+              sx={{
+                border: 1,
+                borderLeft: '1px solid black',
+              }}
+            >
+              ${formData.annualPackage.toFixed(2)}
+            </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>Agreement Percentage:</TableCell>
-            <TableCell>{formData.agreementPercentage}%</TableCell>
+            <TableCell
+              sx={{
+                border: 1,
+                borderRight: '1px solid black',
+              }}
+            >
+              Agreement Percentage:
+            </TableCell>
+            <TableCell
+              sx={{
+                border: 1,
+                borderLeft: '1px solid black',
+              }}
+            >
+              {formData.agreementPercentage}%
+            </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>Total Amount:</TableCell>
-            <TableCell>
+            <TableCell
+              sx={{
+                border: 1,
+                borderRight: '1px solid black',
+              }}
+            >
+              Total Amount:
+            </TableCell>
+            <TableCell
+              sx={{
+                border: 1,
+                borderLeft: '1px solid black',
+              }}
+            >
               $
               {(
                 (formData.annualPackage * formData.agreementPercentage) /
@@ -131,19 +177,59 @@ const InstallmentTable = ({ formData }) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>Upfront:</TableCell>
-            <TableCell>${formData.upfront.toFixed(2)}</TableCell>
+            <TableCell
+              sx={{
+                border: 1,
+                borderRight: '1px solid black',
+              }}
+            >
+              Upfront:
+            </TableCell>
+            <TableCell
+              sx={{
+                border: 1,
+                borderLeft: '1px solid black',
+              }}
+            >
+              ${formData.upfront.toFixed(2)}
+            </TableCell>
           </TableRow>
-
           <TableRow>
-            <TableCell>First Installment</TableCell>
-            <TableCell>${installments[0].toFixed(2)}</TableCell>
+            <TableCell
+              sx={{
+                border: 1,
+                borderRight: '1px solid black',
+              }}
+            >
+              First Installment:
+            </TableCell>
+            <TableCell
+              sx={{
+                border: 1,
+                borderLeft: '1px solid black',
+              }}
+            >
+              ${installments[0].toFixed(2)}
+            </TableCell>
           </TableRow>
-
           {installments.slice(1).map((amount, index) => (
             <TableRow key={index}>
-              <TableCell>{dates[index + 1]}:</TableCell>
-              <TableCell>${amount.toFixed(2)}</TableCell>
+              <TableCell
+                sx={{
+                  border: 1,
+                  borderRight: '1px solid black',
+                }}
+              >
+                {dates[index + 1]}:
+              </TableCell>
+              <TableCell
+                sx={{
+                  border: 1,
+                  borderLeft: '1px solid black',
+                }}
+              >
+                ${amount.toFixed(2)}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

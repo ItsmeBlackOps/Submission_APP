@@ -70,9 +70,9 @@ const EmailTemplates = () => {
       name,
       company,
       joiningDate, // Store joiningDate in formData
-      annualPackage,
+      annualPackage: Number(annualPackage),
       agreementPercentage,
-      upfront,
+      upfront: Number(upfront),
     }); // Store form data
     setOpen(true);
     setShowForm(false); // Hide the form when dialog is opened

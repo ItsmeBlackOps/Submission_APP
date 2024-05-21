@@ -46,7 +46,7 @@ const MetricsBox = () => {
   useEffect(() => {
     const fetchDateTime = async () => {
       try {
-        const response = await fetch('http://worldtimeapi.org/api/timezone/America/New_York');
+        const response = await fetch('https://worldtimeapi.org/api/timezone/America/New_York');
         const data = await response.json();
         const dateTimeInNewYork = convertToFormattedDate(data.datetime);
         setDateTimeInNewYork(dateTimeInNewYork);
@@ -193,20 +193,21 @@ const MetricsBox = () => {
 
   return (
     <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 2,
-        p: 3,
-        borderRadius: 2,
-        boxShadow: 3,
-        backgroundColor: 'background.paper',
-        minWidth: 300,
-      }}
-    >
-      <Typography level="h4" fontWeight="lg" sx={{ mb: 2 }}>
-        KPI Metrics
-      </Typography>
+    sx={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gap: 2,
+      p: 3,
+      borderRadius: 2,
+      boxShadow: 3,
+      backgroundColor: 'background.paper',
+      minWidth: 300,
+    }}
+  >
+    <Typography level="h4" fontWeight="lg" sx={{ mb: 2, gridColumn: 'span 3' }}>
+      KPI Metrics
+    </Typography>
+    <Box sx={{ gridColumn: 'span 3' }}>
       <select onChange={(e) => setSelectedBranch(e.target.value)} value={selectedBranch}>
         <option value="">Select Branch</option>
         {[...new Set(candidates.map(candidate => candidate.Branch))].map((branch, index) => (
@@ -215,33 +216,37 @@ const MetricsBox = () => {
           </option>
         ))}
       </select>
-      {metrics.map((metric, index) => (
-        <Box
-          key={index}
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: 1,
-            borderRadius: 1,
-            backgroundColor: 'background.level1',
-          }}
+    </Box>
+    {metrics.map((metric, index) => (
+      <Box
+        key={index}
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: 1,
+          borderRadius: 1,
+          backgroundColor: 'background.level1',
+        }}
+      >
+        <Typography level="body1">{metric.label}</Typography>
+        <Chip
+          size="sm"
+          variant="soft"
+          color={metric.color}
+          sx={{ fontWeight: 'lg' }}
         >
-          <Typography level="body1">{metric.label}</Typography>
-          <Chip
-            size="sm"
-            variant="soft"
-            color={metric.color}
-            sx={{ fontWeight: 'lg' }}
-          >
-            {metric.value}
-          </Chip>
-        </Box>
-      ))}
+          {metric.value}
+        </Chip>
+      </Box>
+    ))}
+    <Box sx={{ gridColumn: 'span 3' }}>
       <TaskList onDataReceived={handleDataReceived} />
+    </Box>
+    <Box sx={{ gridColumn: 'span 3' }}>
       <CandidateData onDataReceived={handleCandidateReceived} />
     </Box>
-  );
-};
+  </Box>
+  )};  
 
 export default MetricsBox;

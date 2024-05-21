@@ -74,7 +74,11 @@ const InterviewForm = () => {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
   };
-
+  function areObjectsEqual(obj1, obj2) {
+    console.log("Comparing objects", obj1, obj2);
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
+  }
+  
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
   };
@@ -122,14 +126,15 @@ const InterviewForm = () => {
       delete item['id'];
       const keys1 = Object.keys(item);
       const keys2 = Object.keys(formData);
-
-      if (keys1.length != keys2.length) {
-        return false;
-      }
+      // if (keys1.length != keys2.length) {
+      //   return false;
+      // }
 
       for (let key of keys1) {
+        console.log(item[key], formData[key]);
         if (typeof item[key] === 'object' && typeof formData[key] === 'object') {
           if (!areObjectsEqual(item[key], formData[key])) {
+            console.log("Objects not equal:", item[key], formData[key]);
             return false;
           }
         } else if (item[key] !== formData[key]) {
@@ -148,11 +153,13 @@ const InterviewForm = () => {
 
     // Disable the submit button
     setIsSubmitting(true);
-    fetch("https://reportcraft-backend.onrender.com/addData", {
+    fetch("http://localhost:3000/addData", {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {
         "Content-Type": "application/json",
+        'user-id': user.name,
+        'user-label': user.labels[0]
       },
     })
       .then((response) => response.json())
@@ -174,6 +181,7 @@ const InterviewForm = () => {
           interview: "",
           location: "",
           position: "",
+          InterviewOrSubmission: '',
           qcStatus: false,
           rate: "",
           recruiterName: user.name,
@@ -252,6 +260,8 @@ const InterviewForm = () => {
         >
           <MenuItem value="Submission">Submission</MenuItem>
           <MenuItem value="Interview">Interview</MenuItem>
+          <MenuItem value="">Select</MenuItem>
+          
         </TextField>
 
         {InterviewOrSubmission === "Interview" && (

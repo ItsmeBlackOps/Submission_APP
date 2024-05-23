@@ -2,25 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Portal } from "@mui/base/Portal";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import { useAuth } from "../utils/AuthContent";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+
 import {
   DataGrid,
   GridToolbarQuickFilter,
   GridToolbar,
-  GridActionsCellItem,
+  GridActionsCellItem
 } from "@mui/x-data-grid";
 import TaskList from "./DataSources/TasksData";
 import Snackbar from "@mui/material/Snackbar";
-import {
-  Alert,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-} from "@mui/material";
+import { Alert } from "@mui/material";
 import axios from "axios";
 
 const useFakeMutation = () => {
@@ -50,21 +43,14 @@ function MyCustomToolbar(props) {
   );
 }
 
-export default function QuickFilterOutsideOfGrid() {
+export default function Interview_List() {
   const { user } = useAuth();
   const mutateRow = useFakeMutation();
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [copiedData, setCopiedData] = useState("");
-  const [snackbar, setSnackbar] = useState(null);
+  const [copiedData, setCopiedData] = React.useState("");
+  const [snackbar, setSnackbar] = React.useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [intSchedule, setSchedule] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedRowId, setSelectedRowId] = useState(null);
-  const [interviewDate, setInterviewDate] = useState("");
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [round, setRound] = useState("");
-  const [rowswithINT, setIntRows] = useState([]);
 
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
@@ -74,79 +60,18 @@ export default function QuickFilterOutsideOfGrid() {
     setSnackbar({ children: message, severity: severity });
     setSnackbarOpen(true);
   };
-
-  const handleDialogClose = () => {
-    setDialogOpen(false);
-    setSelectedRowId(null);
-    setInterviewDate("");
+  const onDataReceived = (data) => {
+    const filteredData = data.filter((row) => {
+      return row.InterviewOrSubmission === "Interview";
+    });
+    
+    setRows(filteredData);
+    setLoading(false);
   };
 
-  const handleDialogSubmit = () => {
-    const rowToDuplicate = rows.find((row) => row.id === selectedRowId);
-    if (rowToDuplicate) {
-      rowToDuplicate["InterviewOrSubmission"] = "Interview";
-      rowToDuplicate["SubmissionDate"] = rowToDuplicate["date"];
-      rowToDuplicate["InterviewSchedule"] = interviewDate;
-      rowToDuplicate["date"] = new Date().toISOString().substr(0, 10);
-      rowToDuplicate["RoundOfInterview"] = round;
-      delete rowToDuplicate["id"];
-      console.log(rowToDuplicate);
-      const existingEntry = rowswithINT.find((item) => {
-        delete item["id"];
-        const keys1 = Object.keys(item);
-        const keys2 = Object.keys(rowToDuplicate);
-        for (let key of keys1) {
-          console.log(item[key], rowToDuplicate[key]);
-          if (
-            typeof item[key] === "object" &&
-            typeof rowToDuplicate[key] === "object"
-          ) {
-            if (!areObjectsEqual(item[key], rowToDuplicate[key])) {
-              console.log("Objects not equal:", item[key], rowToDuplicate[key]);
-              return false;
-            }
-          } else if (item[key] !== rowToDuplicate[key]) {
-            return false;
-          }
-        }
-
-        return true;
-      });
-
-      if (existingEntry) {
-        handleOpenSnackbar("Duplicate entry detected.", "warning");
-        handleDialogClose();
-      } else {
-        fetch("https://reportcraft-backend.onrender.com/addData", {
-          method: "POST",
-          body: JSON.stringify(rowToDuplicate),
-          headers: {
-            "Content-Type": "application/json",
-            "user-id": user.name,
-            "user-label": user.labels[0],
-          },
-        })
-        .then((response) => response.json())
-        .then(() => {
-          handleOpenSnackbar("Interview converted successfully.", "success");
-          window.location.reload()
-        })
-        .catch((error) => {
-          handleOpenSnackbar("Error converting interview: " + error.message, "error");
-        });
-
-        handleDialogClose();
-      }
-    }
-  };
-
-  const convertInterview = React.useCallback(
-    (id) => () => {
-      setSelectedRowId(id);
-      setDialogOpen(true);
-    },
-    []
-  );
+  const handleProcessRowUpdateError = React.useCallback((error) => {
+    setSnackbar({ children: error.message, severity: "error" });
+  }, []);
 
   const handleDeleteClick = (id) => () => {
     const row = rows.find((row) => row.id === id);
@@ -166,7 +91,6 @@ export default function QuickFilterOutsideOfGrid() {
       .then((response) => response.json())
       .then(() => {
         handleOpenSnackbar("Row deleted successfully.", "success");
-        window.location.reload()
       })
       .catch((error) => {
         handleOpenSnackbar("Error deleting row: " + error.message, "error");
@@ -177,23 +101,7 @@ export default function QuickFilterOutsideOfGrid() {
     }
   };
 
-  const onDataReceived = (data) => {
-    const filteredData = data.filter((row) => {
-      return row.InterviewOrSubmission === "Submission";
-    });
-    const interviewData = data.filter((row) => {
-      return row.InterviewOrSubmission === "Interview";
-    });
-    setIntRows(interviewData);
-    setRows(filteredData);
-    setLoading(false);
-  };
-
-  const handleProcessRowUpdateError = React.useCallback((error) => {
-    handleOpenSnackbar(error.message, "error");
-  }, []);
-
-  const handleRowEdit = (newRow) => {
+  const handleRowEdit = (newRow, oldRow) => {
     const updatedRows = rows.map((row) =>
       row.id === newRow.id ? { ...row, ...newRow } : row
     );
@@ -208,15 +116,24 @@ export default function QuickFilterOutsideOfGrid() {
           newRow
         )
         .then(() => {
-          handleOpenSnackbar("Row successfully saved", "success");
+          setSnackbar({
+            children: "Row successfully saved",
+            severity: "success",
+          });
         })
         .catch((error) => {
           console.error("Error updating row in backend:", error);
-          handleOpenSnackbar("Error updating row: " + error.message, "error");
+          setSnackbar({
+            children: "Error updating row: " + error.message,
+            severity: "error",
+          });
         });
     } else {
       // Show a popup indicating that the user cannot edit this row
-      handleOpenSnackbar("You cannot edit this user's data", "warning");
+      setSnackbar({
+        children: "You cannot edit this user's data",
+        severity: "warning",
+      });
     }
 
     console.log("Updated rows:", updatedRows); // Log the updated rows
@@ -228,7 +145,7 @@ export default function QuickFilterOutsideOfGrid() {
     async (newRow) => {
       const response = await mutateRow(newRow);
       handleRowEdit(newRow);
-      handleOpenSnackbar("User successfully saved", "success");
+      setSnackbar({ children: "User successfully saved", severity: "success" });
       return response;
     },
     [mutateRow]
@@ -262,13 +179,14 @@ export default function QuickFilterOutsideOfGrid() {
       editable: true,
       type: "singleSelect",
       valueOptions: ["Submission", "Interview"],
+      
     },
-    // {
-    //   field: "InterviewSchedule",
-    //   headerName: "Interview Schedule",
-    //   width: 200,
-    //   editable: true,
-    // },
+    {
+      field: "InterviewSchedule",
+      headerName: "Interview Schedule",
+      width: 200,
+      editable: true,
+    },
     { field: "location", headerName: "Location", width: 150, editable: true },
     { field: "position", headerName: "Position", width: 200, editable: true },
     {
@@ -332,18 +250,13 @@ export default function QuickFilterOutsideOfGrid() {
       width: 80,
       getActions: (params) => [
         <GridActionsCellItem
-          label="Convert To Interview"
-          onClick={convertInterview(params.id)}
-          showInMenu
-        />,
-        <GridActionsCellItem
           icon={<DeleteIcon />}
           label="Delete"
           onClick={handleDeleteClick(params.id)}
           color="inherit"
         />,
       ],
-    },
+    }
   ];
 
   columns = columns.map((column) => {
@@ -357,17 +270,9 @@ export default function QuickFilterOutsideOfGrid() {
   });
 
   return (
-    <Box
-      sx={{
-        height: "calc(100vh - 64px)",
-        width: "100%",
-        mt: "64px",
-        boxSizing: "border-box",
-        padding: 2,
-      }}
-    >
+    <Box sx={{ height: 'calc(100vh - 64px)', width: '100%', mt: '64px', boxSizing: 'border-box', padding: 2 }}>
       <DataGrid
-        pageSizeOptions={[5, 15, 25]}
+        pageSizeOptions={[5, 25, 100]}
         checkboxSelection
         cellSelection
         disableRowSelectionOnClick
@@ -404,10 +309,9 @@ export default function QuickFilterOutsideOfGrid() {
           },
         }}
       />
-
       {!!snackbar && (
         <Snackbar
-          open={snackbarOpen}
+          open
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
           onClose={handleCloseSnackbar}
           autoHideDuration={6000}
@@ -418,40 +322,6 @@ export default function QuickFilterOutsideOfGrid() {
       <div>
         <TaskList onDataReceived={onDataReceived} />
       </div>
-
-      <Dialog open={dialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>Convert to Interview</DialogTitle>
-        <DialogContent>
-          <TextField
-            margin="dense"
-            label="Interview Date"
-            type="date"
-            fullWidth
-            value={interviewDate}
-            onChange={(e) => setInterviewDate(e.target.value)}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <TextField
-            margin="dense"
-            label="Round"
-            type="string"
-            fullWidth
-            value={round}
-            onChange={(e) => setRound(e.target.value)}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={handleDialogSubmit} color="primary">
-            Submit
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

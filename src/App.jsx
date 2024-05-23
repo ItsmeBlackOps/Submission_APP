@@ -18,6 +18,8 @@ import ReferenceFormat from './Pages/Compliance/referece'
 import ComplianceRoutes from './utils/ComplianceRoutes'
 import EmailTemplates from './Pages/Compliance/emailTemplates'
 import Box from '@mui/joy/Box';
+import Interview_List from './Pages/Interview'
+import NewCandidate from './Pages/CreateCandidate'
 
 function App() {
   return (
@@ -28,6 +30,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Home />} />
             <Route path="/SignUp" element={<SignUp />} />
+            <Route path="/NewCandidate" element={<NewCandidate />} />
             <Route element={<ComplianceRoutes />}>
               <Route path="/Email" element={<ReferenceFormat />} />
               <Route path="/Templates" element={<EmailTemplates />} />
@@ -35,7 +38,8 @@ function App() {
             <Route element={<PrivateRoutes />}>
               <Route path="/profile" element={<Profile />} />
               <Route path="/form" element={<InterviewForm />} />
-              <Route path="/tasks" element={<QuickFilterOutsideOfGrid />} />
+              <Route path="/submissions" element={<QuickFilterOutsideOfGrid />} />
+              <Route path="/interviews" element={<Interview_List />} />
               <Route path="/candidate" element={<Candidate_List />} />
               <Route element={<ManagerRoutes />}>
               </Route>

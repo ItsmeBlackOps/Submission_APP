@@ -48,10 +48,11 @@ const InterviewForm = () => {
   const [InterviewOrSubmission, setInterviewOrSubmission] = useState("");
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // default to success
 
   useEffect(() => {
     if (success) {
-      handleOpenSnackbar("Form submitted successfully.");
+      handleOpenSnackbar("Form submitted successfully.", "success");
       setSuccess(false); // Reset success status
     }
   }, [success]);
@@ -73,6 +74,7 @@ const InterviewForm = () => {
   const handleOpenSnackbar = (message) => {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
+    setSnackbarSeverity(severity);
   };
   function areObjectsEqual(obj1, obj2) {
     console.log("Comparing objects", obj1, obj2);
@@ -153,7 +155,7 @@ const InterviewForm = () => {
 
     // Disable the submit button
     setIsSubmitting(true);
-    fetch("https://reportcraft-backend.onrender.com/api/addData", {
+    fetch("https://reportcraft-backend.onrender.com/addData", {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {
@@ -167,38 +169,35 @@ const InterviewForm = () => {
         console.log(data);
         // Re-enable the submit button
         setIsSubmitting(false);
-        setSuccess(true); // Set success status
+        setSuccess(true);
         setFormData({
           InterviewSchedule: "",
           candidateName: "",
           comments: "",
           company: "",
           date: new Date().toISOString().substr(0, 10),
+          vendorEmail: "",
           employmentType: "",
           followUp2: "",
           followUp3: "",
           followUp4: "",
-          interview: "",
+          InterviewOrSubmission: '',
           location: "",
           position: "",
-          InterviewOrSubmission: '',
           qcStatus: false,
           rate: "",
           recruiterName: user.name,
           sourceOfSubmission: "",
-          status: "",
-          submission: "",
           vendorContact: "",
           vendorName: "",
+          avatarUrl: "",
         });
       })
       .catch((error) => {
         console.error("Error:", error);
         // Re-enable the submit button
         setIsSubmitting(false);
-        handleOpenSnackbar(
-          "Failed to submit the form. Please try again later."
-        );
+        handleOpenSnackbar("Failed to submit the form. Please try again later.", "error");
       });
   };
 
@@ -383,6 +382,7 @@ const InterviewForm = () => {
         variant="standard"
         required
       />
+
       {/* <TextField
         label="Follow Up 2"
         name="followUp2"
@@ -415,8 +415,8 @@ const InterviewForm = () => {
           elevation={6}
           variant="filled"
           onClose={handleCloseSnackbar}
-          severity={success ? "success" : "error"}
-        >
+          severity={snackbarSeverity} // use severity state
+          >
           {snackbarMessage}
         </MuiAlert>
       </Snackbar>

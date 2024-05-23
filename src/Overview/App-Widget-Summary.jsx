@@ -71,11 +71,13 @@ const MetricsBox = () => {
       candidates.some(candidate => candidate.Candidate === task.candidateName && candidate.Branch === selectedBranch)
     );
     console.log(branchTasks);
-    const submissionsToday = branchTasks.filter(task => isSameDay(new Date(task.date), today)).length;
-    const submissionsThisWeek = branchTasks.filter(task => isWithinInterval(new Date(task.date), { start: weekStart, end: today })).length;
-    const submissionsThisMonth = branchTasks.filter(task => isWithinInterval(new Date(task.date), { start: monthStart, end: today })).length;
+    const submissionsToday = branchTasks.filter(task => task.InterviewOrSubmission === 'Submission' && isSameDay(new Date(task.date), today)).length;
+    const submissionsThisWeek = branchTasks.filter(task => task.InterviewOrSubmission === 'Submission' && isWithinInterval(new Date(task.date), { start: weekStart, end: today })).length;
+    const submissionsThisMonth = branchTasks.filter(task => task.InterviewOrSubmission === 'Submission' && isWithinInterval(new Date(task.date), { start: monthStart, end: today })).length;
+    
 
-    const interviewsToday = branchTasks.filter(task => task.InterviewOrSubmission === 'Interview' && isSameDay(new Date(task.InterviewSchedule), today)).length;
+    const interviewsToday = branchTasks.filter(task => task.InterviewOrSubmission === 'Interview' && isSameDay(new Date(task.date), today)).length;
+
     const interviewsThisWeek = branchTasks.filter(task => task.InterviewOrSubmission === 'Interview' && isWithinInterval(new Date(task.InterviewSchedule), { start: weekStart, end: today })).length;
     const interviewsThisMonth = branchTasks.filter(task => task.InterviewOrSubmission === 'Interview' && isWithinInterval(new Date(task.InterviewSchedule), { start: monthStart, end: today })).length;
 
@@ -134,9 +136,9 @@ const MetricsBox = () => {
       { label: 'Submissions Today', value: submissionsToday, color: 'primary' },
       { label: 'Submissions This Week', value: submissionsThisWeek, color: 'success' },
       { label: 'Submissions This Month', value: submissionsThisMonth, color: 'warning' },
-      { label: 'Interviews Today', value: interviewsToday, color: 'info' },
-      { label: 'Interviews This Week', value: interviewsThisWeek, color: 'info' },
-      { label: 'Interviews This Month', value: interviewsThisMonth, color: 'info' },
+      { label: 'Interviews Entered Today', value: interviewsToday, color: 'info' },
+      { label: 'Interviews Happening This Week', value: interviewsThisWeek, color: 'info' },
+      { label: 'Interviews Happened This Month', value: interviewsThisMonth, color: 'info' },
       { label: 'Total Submissions', value: totalSubmissions, color: 'primary' },
       { label: 'Total Interviews', value: totalInterviews, color: 'info' },
       { label: 'Interview Conversion Rate', value: `${interviewConversionRate.toFixed(2)}%`, color: 'success' },

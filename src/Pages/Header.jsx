@@ -147,11 +147,19 @@ const Header = () => {
             </Button>
             <Button
               component={Link}
-              to="/tasks"
+              to="/submissions"
               color={buttonColors[color]}
               sx={{ display: { xs: "none", md: "inline-flex" } }}
             >
               Submissions
+            </Button>
+            <Button
+              component={Link}
+              to="/interviews"
+              color={buttonColors[color]}
+              sx={{ display: { xs: "none", md: "inline-flex" } }}
+            >
+              Interviews
             </Button>
             <Button onClick={logoutUser} color="inherit" variant="outlined">
               Logout

@@ -44,7 +44,6 @@ function TaskList({ onDataReceived }) {
         }
     };
     
-    // You might want to render something here, even if it's just a placeholder or loading indicator
     if (loading) {
     }
 

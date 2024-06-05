@@ -64,7 +64,7 @@ const MetricsBox = () => {
    
     const today = dateTimeInNewYork;
 
-    const weekStart = startOfWeek(today, { weekStartsOn: 1 }); // assuming week starts on Monday
+    const weekStart = startOfWeek(today, { weekStartsOn: 2 }); // assuming week starts on Monday
     const monthStart = startOfMonth(today);
 
     const branchTasks = tasks.filter(task =>

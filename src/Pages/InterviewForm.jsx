@@ -71,7 +71,7 @@ const InterviewForm = () => {
     setLoading(false);
   };
 
-  const handleOpenSnackbar = (message) => {
+  const handleOpenSnackbar = (message, severity) => {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
     setSnackbarSeverity(severity);
@@ -121,7 +121,7 @@ const InterviewForm = () => {
       !formData.vendorEmail ||
       (InterviewOrSubmission === "Interview" && !formData.InterviewSchedule)
     ) {
-      handleOpenSnackbar("All fields are required.");
+      handleOpenSnackbar("All fields are required.", 'error');
       return;
     }
     const existingEntry = taskdata.find((item) => {
@@ -149,7 +149,7 @@ const InterviewForm = () => {
       
     );
     if (existingEntry) {
-      handleOpenSnackbar("Duplicate entry detected.");
+      handleOpenSnackbar("Duplicate entry detected.", 'error');
       return;
     }
 
